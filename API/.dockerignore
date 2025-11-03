@@ -1,0 +1,15 @@
+bin/
+obj/
+*.user
+*.suo
+*.swp
+*.tmp
+*.log
+*.db-shm
+*.db-wal
+*.db-journal
+.git
+.gitignore
+.vscode
+.vs
+Dockerfile
