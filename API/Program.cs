@@ -8,8 +8,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+//builder.Services.AddDbContext<AppDbContext>(opt =>
+//    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+var conn = builder.Configuration.GetConnectionString("DefaultConnection")
+           ?? Environment.GetEnvironmentVariable("DB_CONNECTION");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(conn));
 
 var app = builder.Build();
 
@@ -29,10 +35,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//    db.Database.Migrate();
+//}
 
 app.Run();
