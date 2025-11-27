@@ -11,8 +11,8 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddDbContext<AppDbContext>(opt =>
 //    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
-var conn = builder.Configuration.GetConnectionString("DefaultConnection")
-           ?? Environment.GetEnvironmentVariable("DB_CONNECTION");
+var conn = Environment.GetEnvironmentVariable("DB_CONNECTION")
+           ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(conn));
@@ -26,10 +26,10 @@ if (app.Environment.IsDevelopment() || enableSwagger)
     app.UseSwaggerUI();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseHttpsRedirection();
+//}
 
 app.UseAuthorization();
 
