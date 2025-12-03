@@ -2,10 +2,58 @@
     ViewData["Title"] = "Sistema de Gestión de Vehículos";
 }
 
+
+<!-- DASHBOARD DE INDICADORES -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small">Total de vehículos</div>
+                <div class="display-6 fw-semibold text-primary" id="totalVehicles">0</div>
+                <div class="small text-muted mt-1">Registrados en el sistema</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small">Total de personas</div>
+                <div class="display-6 fw-semibold text-success" id="totalPersons">0</div>
+                <div class="small text-muted mt-1">Disponibles como propietarios</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small">Vehículos con propietario</div>
+                <div class="display-6 fw-semibold text-secondary" id="vehiclesWithOwner">0</div>
+                <div class="small text-muted mt-1">Relaciones activas</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small">Vehículos sin propietario</div>
+                <div class="display-6 fw-semibold text-danger" id="vehiclesWithoutOwner">0</div>
+                <div class="small text-muted mt-1">Pendientes de asignación</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
 <!-- HERO PRINCIPAL -->
 <div class="row align-items-center mb-5">
     <div class="col-lg-7">
-        <span class="badge rounded-pill text-bg-light border mb-3">
+        <span class="badge rounded-pill text-bg-light text-dark border mb-3">
             Proyecto académico · Tópicos Avanzados de Programación · Grupo 08
         </span>
 
@@ -89,6 +137,23 @@
     </div>
 </div>
 
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-8 text-center">
+        <h4 class="mb-3">Visualización 3D de Vehículo</h4>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <canvas id="carCanvas" class="w-100" style="height: 380px; display: block;"></canvas>
+                <p class="text-muted small mt-2 mb-0">
+                    Vehículo 3D estilizado y elegante, rotando de forma constante.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- TARJETAS RESUMEN DE MÓDULOS -->
 <div class="row g-4 mb-4">
     <div class="col-md-4">
@@ -170,20 +235,7 @@
 </div>
 
 
-<div class="row justify-content-center my-5">
-    <div class="col-md-8 text-center">
-        <h4 class="mb-3">Visualización 3D de Vehículo</h4>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <canvas id="carCanvas" class="w-100" style="height: 380px; display: block;"></canvas>
-                <p class="text-muted small mt-2 mb-0">
-                    Vehículo 3D estilizado y elegante, rotando de forma constante.
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 @section Scripts {
@@ -426,4 +478,51 @@
             animate();
         })();
     </script>
+
+    <script>
+    async function loadDashboard() {
+        try {
+            // Llamadas a la API
+            const vehiclesResponse = await fetch("/api/Vehicles");
+            const personsResponse = await fetch("/api/Person");
+            const vehiclesWithOwnerResponse = await fetch("/api/Vehicles/with-owner");
+
+            const vehicles = await vehiclesResponse.json();
+            const persons = await personsResponse.json();
+            const vehiclesWithOwner = await vehiclesWithOwnerResponse.json();
+
+            const totalVehicles = vehicles.length;
+            const totalPersons = persons.length;
+
+            const withOwner = vehiclesWithOwner.filter(v => v.ownerId !== null).length;
+            const withoutOwner = vehiclesWithOwner.filter(v => v.ownerId === null).length;
+
+            animateCounter("totalVehicles", totalVehicles);
+            animateCounter("totalPersons", totalPersons);
+            animateCounter("vehiclesWithOwner", withOwner);
+            animateCounter("vehiclesWithoutOwner", withoutOwner);
+
+        } catch (error) {
+            console.error("Error cargando dashboard:", error);
+        }
+    }
+
+    function animateCounter(id, target) {
+        const element = document.getElementById(id);
+        let current = 0;
+        const increment = Math.max(1, Math.floor(target / 40));
+
+        const interval = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(interval);
+            }
+            element.textContent = current;
+        }, 20);
+    }
+
+    document.addEventListener("DOMContentLoaded", loadDashboard);
+</script>
+
 }
