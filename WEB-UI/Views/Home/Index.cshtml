@@ -1,6 +1,9 @@
-﻿@{
+﻿@model WEB_UI.Models.DashboardViewModel
+
+@{
     ViewData["Title"] = "Sistema de Gestión de Vehículos";
 }
+
 
 
 <!-- DASHBOARD DE INDICADORES -->
@@ -10,7 +13,8 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="text-muted small">Total de vehículos</div>
-                <div class="display-6 fw-semibold text-primary" id="totalVehicles">0</div>
+                <div class="display-6 fw-semibold text-primary counter"
+                     data-value="@Model.TotalVehicles">0</div>
                 <div class="small text-muted mt-1">Registrados en el sistema</div>
             </div>
         </div>
@@ -20,7 +24,8 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="text-muted small">Total de personas</div>
-                <div class="display-6 fw-semibold text-success" id="totalPersons">0</div>
+                <div class="display-6 fw-semibold text-success counter"
+                     data-value="@Model.TotalPersons">0</div>
                 <div class="small text-muted mt-1">Disponibles como propietarios</div>
             </div>
         </div>
@@ -30,7 +35,8 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="text-muted small">Vehículos con propietario</div>
-                <div class="display-6 fw-semibold text-secondary" id="vehiclesWithOwner">0</div>
+                <div class="display-6 fw-semibold text-secondary counter"
+                     data-value="@Model.VehiclesWithOwner">0</div>
                 <div class="small text-muted mt-1">Relaciones activas</div>
             </div>
         </div>
@@ -40,13 +46,15 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="text-muted small">Vehículos sin propietario</div>
-                <div class="display-6 fw-semibold text-danger" id="vehiclesWithoutOwner">0</div>
+                <div class="display-6 fw-semibold text-danger counter"
+                     data-value="@Model.VehiclesWithoutOwner">0</div>
                 <div class="small text-muted mt-1">Pendientes de asignación</div>
             </div>
         </div>
     </div>
 
 </div>
+
 
 
 
@@ -479,50 +487,26 @@
         })();
     </script>
 
+
     <script>
-    async function loadDashboard() {
-        try {
-            // Llamadas a la API
-            const vehiclesResponse = await fetch("/api/Vehicles");
-            const personsResponse = await fetch("/api/Person");
-            const vehiclesWithOwnerResponse = await fetch("/api/Vehicles/with-owner");
+        document.addEventListener("DOMContentLoaded", function () {
+            const counters = document.querySelectorAll(".counter");
 
-            const vehicles = await vehiclesResponse.json();
-            const persons = await personsResponse.json();
-            const vehiclesWithOwner = await vehiclesWithOwnerResponse.json();
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute("data-value"));
+                let current = 0;
+                const increment = Math.max(1, Math.floor(target / 40));
 
-            const totalVehicles = vehicles.length;
-            const totalPersons = persons.length;
-
-            const withOwner = vehiclesWithOwner.filter(v => v.ownerId !== null).length;
-            const withoutOwner = vehiclesWithOwner.filter(v => v.ownerId === null).length;
-
-            animateCounter("totalVehicles", totalVehicles);
-            animateCounter("totalPersons", totalPersons);
-            animateCounter("vehiclesWithOwner", withOwner);
-            animateCounter("vehiclesWithoutOwner", withoutOwner);
-
-        } catch (error) {
-            console.error("Error cargando dashboard:", error);
-        }
-    }
-
-    function animateCounter(id, target) {
-        const element = document.getElementById(id);
-        let current = 0;
-        const increment = Math.max(1, Math.floor(target / 40));
-
-        const interval = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                current = target;
-                clearInterval(interval);
-            }
-            element.textContent = current;
-        }, 20);
-    }
-
-    document.addEventListener("DOMContentLoaded", loadDashboard);
-</script>
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    counter.textContent = current;
+                }, 20);
+            });
+        });
+    </script>
 
 }
