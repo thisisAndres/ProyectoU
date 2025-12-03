@@ -2,74 +2,106 @@
     ViewData["Title"] = "Sistema de Gestión de Vehículos";
 }
 
+<!-- HERO PRINCIPAL -->
 <div class="row align-items-center mb-5">
     <div class="col-lg-7">
-        <h1 class="display-5 fw-bold mb-3">
-            Sistema de Gestión de Vehículos
+        <span class="badge rounded-pill text-bg-light border mb-3">
+            Proyecto académico · Tópicos Avanzados de Programación · Grupo 08
+        </span>
+
+        <h1 class="display-5 fw-semibold mb-3">
+            Control centralizado de vehículos, personas y propietarios
         </h1>
 
-        <p class="lead text-muted">
-            Aplicación web para administrar vehículos, personas y propietarios
-            de forma centralizada y sencilla. Desde aquí puedes registrar la
-            información, mantenerla actualizada y relacionar cada vehículo con
-            su dueño.
+        <p class="lead text-muted mb-4">
+            Un panel único para registrar vehículos, administrar la información de las personas
+            y asignar propietarios de forma consistente mediante servicios API.
         </p>
 
-        <div class="d-flex flex-wrap gap-2 mt-3">
+        <div class="d-flex flex-wrap gap-2">
             <a asp-controller="Vehicles" asp-action="Index" class="btn btn-primary btn-lg">
-                Gestionar vehículos
+                Ir al módulo de Vehículos
             </a>
-            <a asp-controller="Persons" asp-action="Index" class="btn btn-outline-primary btn-lg">
+            <a asp-controller="Owners" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                Ver vehículos con propietario
+            </a>
+            <a asp-controller="Persons" asp-action="Index" class="btn btn-link text-decoration-none">
                 Gestionar personas
-            </a>
-            <a asp-controller="Owners" asp-action="Index" class="btn btn-outline-secondary btn-lg">
-                Propietarios de vehículos
             </a>
         </div>
 
-        <p class="text-muted small mt-3 mb-0">
-            Proyecto académico · Tópicos Avanzados de Programación · Grupo 08
-        </p>
+        <div class="row mt-4 g-3">
+            <div class="col-6 col-md-4">
+                <div class="small text-muted text-uppercase">Entidades</div>
+                <div class="fw-semibold">Vehículos · Personas</div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="small text-muted text-uppercase">Relaciones</div>
+                <div class="fw-semibold">Asignación de propietarios</div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="small text-muted text-uppercase">Integración</div>
+                <div class="fw-semibold">Consumo de API en la nube</div>
+            </div>
+        </div>
     </div>
 
     <div class="col-lg-5 mt-4 mt-lg-0">
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
-                <h5 class="card-title mb-3">Resumen del sistema</h5>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2">
-                        <span class="badge bg-primary text-light me-2">Vehículos</span>
-                        Registro de placa, marca, modelo y detalles del vehículo.
-                    </li>
-                    <li class="mb-2">
-                        <span class="badge bg-success text-light me-2">Personas</span>
-                        Administración de la información básica de las personas.
-                    </li>
-                    <li class="mb-2">
-                        <span class="badge bg-secondary text-light me-2">Propietarios</span>
-                        Asignación de un propietario a cada vehículo mediante la API.
-                    </li>
-                    <li class="mb-2">
-                        <span class="badge bg-info text-dark me-2">API</span>
-                        Integración con servicios en la nube para lectura y actualización de datos.
-                    </li>
-                </ul>
+                <h5 class="card-title mb-3">Qué puedes hacer aquí</h5>
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex">
+                        <div class="me-3 text-primary fw-bold">01</div>
+                        <div>
+                            <div class="fw-semibold">Registrar vehículos</div>
+                            <div class="small text-muted">
+                                Guarda placa, marca y modelo para cada unidad del sistema.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3 text-success fw-bold">02</div>
+                        <div>
+                            <div class="fw-semibold">Administrar personas</div>
+                            <div class="small text-muted">
+                                Mantén actualizada la información básica de las personas.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3 text-secondary fw-bold">03</div>
+                        <div>
+                            <div class="fw-semibold">Asignar propietarios</div>
+                            <div class="small text-muted">
+                                Relaciona cada vehículo con su propietario mediante los endpoints
+                                <code class="small">/api/Vehicles/with-owner</code> y
+                                <code class="small">/api/Vehicles/{vehicleId}/Owner/{ownerId}</code>.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-top mt-2 pt-2 small text-muted">
+                        Toda la información se obtiene y actualiza consumiendo el API remoto desde el módulo web.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- TARJETAS RESUMEN DE MÓDULOS -->
 <div class="row g-4 mb-4">
     <div class="col-md-4">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">Módulo de Vehículos</h5>
-                <p class="card-text text-muted">
-                    Permite consultar, crear y actualizar la información de los vehículos
-                    registrados. Es el punto central para conocer el estado de la flota.
+                <div class="small text-uppercase text-muted mb-1">Módulo</div>
+                <h5 class="card-title mb-2">Vehículos</h5>
+                <p class="card-text text-muted small mb-3">
+                    Consulta, registro y actualización de vehículos. Es la base
+                    para saber qué unidades hay en el sistema.
                 </p>
                 <a asp-controller="Vehicles" asp-action="Index" class="stretched-link text-decoration-none">
-                    Ir al módulo →
+                    Abrir módulo de vehículos →
                 </a>
             </div>
         </div>
@@ -78,13 +110,14 @@
     <div class="col-md-4">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">Módulo de Personas</h5>
-                <p class="card-text text-muted">
-                    Aquí se administra la información de contacto de las personas:
-                    nombre, apellidos y correo electrónico, utilizada luego para los propietarios.
+                <div class="small text-uppercase text-muted mb-1">Módulo</div>
+                <h5 class="card-title mb-2">Personas</h5>
+                <p class="card-text text-muted small mb-3">
+                    Mantén la información de las personas (nombre, apellidos, correo)
+                    que luego podrán ser asignadas como propietarias.
                 </p>
                 <a asp-controller="Persons" asp-action="Index" class="stretched-link text-decoration-none">
-                    Ir al módulo →
+                    Abrir módulo de personas →
                 </a>
             </div>
         </div>
@@ -93,30 +126,49 @@
     <div class="col-md-4">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">Asignación de Propietarios</h5>
-                <p class="card-text text-muted">
-                    Relaciona cada vehículo con su propietario utilizando los servicios
-                    de la API. Facilita saber quién es responsable de cada vehículo.
+                <div class="small text-uppercase text-muted mb-1">Módulo</div>
+                <h5 class="card-title mb-2">Propietarios</h5>
+                <p class="card-text text-muted small mb-3">
+                    Visualiza la relación vehículo–propietario y actualízala consumiendo
+                    directamente los endpoints del API.
                 </p>
                 <a asp-controller="Owners" asp-action="Index" class="stretched-link text-decoration-none">
-                    Ir al módulo →
+                    Abrir módulo de propietarios →
                 </a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- FLUJO RESUMIDO -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
-        <h3 class="h5 mb-3">Flujo principal de trabajo</h3>
-        <ol class="mb-0 text-muted">
-            <li class="mb-1">Registrar las personas que formarán parte del sistema.</li>
-            <li class="mb-1">Registrar los vehículos con su respectiva información básica.</li>
-            <li class="mb-1">Asignar un propietario a cada vehículo desde el módulo de Propietarios.</li>
-            <li class="mb-1">Consultar en cualquier momento el listado de vehículos con su propietario actual.</li>
-        </ol>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="h5 mb-0">Flujo principal de trabajo</h3>
+            <span class="badge rounded-pill text-bg-light">Vista rápida</span>
+        </div>
+
+        <div class="row text-muted small g-3">
+            <div class="col-md-3">
+                <div class="fw-semibold mb-1">1. Personas</div>
+                <div>Registrar primero las personas que formarán parte del sistema.</div>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold mb-1">2. Vehículos</div>
+                <div>Dar de alta los vehículos con los datos básicos requeridos.</div>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold mb-1">3. Asignación</div>
+                <div>Relacionar cada vehículo con su propietario en el módulo de Propietarios.</div>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold mb-1">4. Consulta</div>
+                <div>Revisar en cualquier momento el listado de vehículos con su propietario actual.</div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <div class="row justify-content-center my-5">
     <div class="col-md-8 text-center">
