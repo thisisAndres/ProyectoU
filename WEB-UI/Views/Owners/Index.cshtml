@@ -1,0 +1,39 @@
+@model IEnumerable<WEB_UI.Models.VehicleWithOwnerViewModel>
+
+@{
+    ViewData["Title"] = "Propietarios";
+}
+
+<h1>Propietarios de vehículos</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Placa</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Propietario</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Plate</td>
+            <td>@item.Brand</td>
+            <td>@item.Model</td>
+            <td>@(string.IsNullOrEmpty(item.OwnerName) ? "Sin asignar" : item.OwnerName)</td>
+            <td>
+                <a asp-action="Edit"
+                   asp-route-id="@item.Id"
+                   class="btn btn-sm btn-primary">
+                    Asignar / Cambiar propietario
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

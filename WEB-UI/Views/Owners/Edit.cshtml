@@ -1,0 +1,42 @@
+@model WEB_UI.Models.AssignOwnerViewModel
+
+@{
+    ViewData["Title"] = "Asignar propietario";
+}
+
+<h1>Asignar propietario</h1>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Vehículo</h5>
+        <p class="card-text">
+            <strong>Id:</strong> @Model.VehicleId <br />
+            <strong>Placa:</strong> @Model.Plate <br />
+            <strong>Marca:</strong> @Model.Brand <br />
+            <strong>Modelo:</strong> @Model.Model
+        </p>
+    </div>
+</div>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="VehicleId" />
+
+    <div class="form-group">
+        <label for="OwnerId">Propietario</label>
+        <select asp-for="OwnerId"
+                asp-items="Model.AvailableOwners"
+                class="form-control">
+            <option value="">-- Seleccione un propietario --</option>
+        </select>
+        <span asp-validation-for="OwnerId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Volver</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
