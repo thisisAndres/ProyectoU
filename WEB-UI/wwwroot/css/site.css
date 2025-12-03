@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card {
+    border-radius: 0.9rem;
+}
+
+.btn-lg {
+    border-radius: 0.8rem;
+}
