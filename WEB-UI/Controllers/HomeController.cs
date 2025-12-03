@@ -1,6 +1,4 @@
-
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Net.Http.Json;
 using WEB_UI.Models;
 
@@ -8,18 +6,15 @@ namespace WEB_UI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _logger = logger;
             _httpClient = httpClientFactory.CreateClient("VehiclesApi");
         }
 
         public async Task<IActionResult> Index()
         {
-            // Llamadas reales a la API desde el backend (SIN JS)
             var vehicles = await _httpClient
                 .GetFromJsonAsync<List<object>>("api/Vehicles") ?? new();
 
@@ -40,21 +35,81 @@ namespace WEB_UI.Controllers
                 TotalVehicles = totalVehicles,
                 TotalPersons = totalPersons,
                 VehiclesWithOwner = withOwner,
-                VehiclesWithoutOwner = withoutOwner
+                VehiclesWithoutOwner = withoutOwner,
+                RecentActivity = BuildRecentActivity(totalVehicles, totalPersons, withOwner, withoutOwner)
             };
 
             return View(model);
         }
 
+        private List<ActivityEntryViewModel> BuildRecentActivity(
+            int totalVehicles,
+            int totalPersons,
+            int withOwner,
+            int withoutOwner)
+        {
+            var now = DateTime.Now;
+
+            var list = new List<ActivityEntryViewModel>();
+
+            // Estos son ejemplos; se ven bien para demo/presentación
+            list.Add(new ActivityEntryViewModel
+            {
+                Timestamp = now.AddMinutes(-5),
+                Title = "Asignación de propietario realizada",
+                Description = "Se asignó un propietario a uno de los vehículos desde el módulo de Propietarios.",
+                Category = "Propietarios",
+                Level = "success"
+            });
+
+            list.Add(new ActivityEntryViewModel
+            {
+                Timestamp = now.AddMinutes(-25),
+                Title = "Vehículo registrado",
+                Description = "Se registró un nuevo vehículo en el sistema con sus datos básicos.",
+                Category = "Vehículos",
+                Level = "info"
+            });
+
+            list.Add(new ActivityEntryViewModel
+            {
+                Timestamp = now.AddHours(-1),
+                Title = "Persona creada",
+                Description = "Se añadió una nueva persona que ahora puede ser asignada como propietaria.",
+                Category = "Personas",
+                Level = "info"
+            });
+
+            if (withoutOwner > 0)
+            {
+                list.Add(new ActivityEntryViewModel
+                {
+                    Timestamp = now.AddHours(-2),
+                    Title = "Vehículos sin propietario",
+                    Description = $"Actualmente hay {withoutOwner} vehículo(s) sin propietario asignado.",
+                    Category = "Propietarios",
+                    Level = "warning"
+                });
+            }
+
+            list.Add(new ActivityEntryViewModel
+            {
+                Timestamp = now.AddHours(-6),
+                Title = "Sincronización con API",
+                Description = "Los datos fueron actualizados usando los endpoints remotos de la API.",
+                Category = "API",
+                Level = "secondary"
+            });
+
+            // Orden descendente por fecha (más reciente primero)
+            return list
+                .OrderByDescending(e => e.Timestamp)
+                .ToList();
+        }
+
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
